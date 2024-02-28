@@ -12,6 +12,7 @@ export function useAuth() {
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -20,9 +21,13 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(user);
       }
     });
-
+    setLoading(false);
     return unsubscribe;
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <AuthContext.Provider value={{ currentUser }}>
